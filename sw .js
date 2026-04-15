@@ -1,20 +1,23 @@
-const CACHE_NAME = 'dus-jp-guide-v1';
+const CACHE_NAME = 'dus-jp-guide-v2';
 const urlsToCache = [
   '/',
   'index.html',
   'manifest.json',
-  'https://placehold.co/200x80?text=Your+Logo'  // スポンサープレースホルダー
+  'icons/icon-192.jpg',
+  'icons/icon-512.jpg'
+  // 外部画像はキャッシュしない（容量・更新問題を避ける）
 ];
 
-// インストール時
+// インストール時に必須リソースをキャッシュ
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(urlsToCache))
+      .then(() => self.skipWaiting()) // 即座に新しいSWを有効化
   );
 });
 
-// フェッチ時（キャッシュ優先・フォールバック）
+// フェッチ：キャッシュ優先、なければネットワーク取得してキャッシュ
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
@@ -22,7 +25,10 @@ self.addEventListener('fetch', event => {
         if (response) return response;
         return fetch(event.request).then(
           fetchResponse => {
-            if (!fetchResponse || fetchResponse.status !== 200) return fetchResponse;
+            // 有効なレスポンスのみキャッシュ（画像やAPIなど、必要に応じて制限）
+            if (!fetchResponse || fetchResponse.status !== 200 || fetchResponse.type !== 'basic') {
+              return fetchResponse;
+            }
             const responseToCache = fetchResponse.clone();
             caches.open(CACHE_NAME).then(cache => {
               cache.put(event.request, responseToCache);
@@ -34,16 +40,17 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// アクティベート時（古いキャッシュ削除）
+// 古いキャッシュの削除
 self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
-    caches.keys().then(cacheNames => Promise.all(
-      cacheNames.map(cacheName => {
-        if (!cacheWhitelist.includes(cacheName)) {
-          return caches.delete(cacheName);
-        }
-      })
-    ))
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cache => {
+          if (cache !== CACHE_NAME) {
+            return caches.delete(cache);
+          }
+        })
+      );
+    }).then(() => self.clients.claim()) // 即座に新しいSWがクライアントを制御
   );
 });
