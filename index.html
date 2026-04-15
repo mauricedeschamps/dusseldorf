@@ -556,7 +556,7 @@
 
   // JavaScript は前回と同じ（ただし service worker 登録部分は下記の通り改良）
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js', { scope: '/' })
+      navigator.serviceWorker.register('sw.js', { scope: '/' })
         .then(reg => console.log('SW registered:', reg))
         .catch(err => console.log('SW registration failed:', err));
     }
