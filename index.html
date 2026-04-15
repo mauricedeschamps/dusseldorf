@@ -4,9 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Düsseldorf Japanese Guide</title>
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#1e1e2f">
-  <style>
+  <!-- iOS 用アイコン（任意） -->
+  <link rel="apple-touch-icon" href="icons/icon-192.jpg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+ <style>
     * {
       margin: 0;
       padding: 0;
@@ -549,13 +554,14 @@
     }
     init();
 
+  // JavaScript は前回と同じ（ただし service worker 登録部分は下記の通り改良）
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then(reg => {
-        console.log('SW registered: ', reg);
-      }).catch(err => {
-        console.log('SW registration failed: ', err);
-      });
+      navigator.serviceWorker.register('/sw.js', { scope: '/' })
+        .then(reg => console.log('SW registered:', reg))
+        .catch(err => console.log('SW registration failed:', err));
     }
+
+    
   </script>
 </body>
 </html>
