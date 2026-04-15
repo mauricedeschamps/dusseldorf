@@ -50,7 +50,6 @@
       flex-direction: column;
     }
 
-    /* ヘッダー・フッターは固定しない（通常フロー） */
     header, footer {
       background-color: var(--surface);
       padding: 1rem;
@@ -67,11 +66,17 @@
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 1rem;
-      flex: 1;
+      padding: 0 1rem;
+      width: 100%;
     }
 
-    /* ヘッダー内レイアウト */
+    /* ヘッダー内を二段に */
+    .header-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
     .header-row {
       display: flex;
       flex-wrap: wrap;
@@ -248,18 +253,25 @@
 </head>
 <body>
   <header>
-    <div class="container" style="padding:0;">
-      <div class="header-row">
-        <h1 data-i18n="app_title">🇯🇵 Düsseldorf Japanese Guide</h1>
-        <div class="controls">
+    <div class="container" style="padding:0 1rem;">
+      <div class="header-content">
+        <!-- タイトル行 -->
+        <div class="header-row">
+          <h1 data-i18n="app_title">🇯🇵 Düsseldorf Japanese Guide</h1>
+        </div>
+        <!-- 1段目：ダーク/クリアモード -->
+        <div class="header-row">
           <div class="controls">
-            <button id="darkModeBtn" title="Dark Mode">🌙</button>
-            <button id="lightModeBtn" title="Light Mode">☀️</button>
+            <button id="darkModeBtn" title="Dark Mode">🌙 Dark</button>
+            <button id="lightModeBtn" title="Light Mode">☀️ Clear</button>
           </div>
+        </div>
+        <!-- 2段目：言語切替 -->
+        <div class="header-row">
           <div class="controls">
-            <button data-lang="en" class="lang-btn active">EN</button>
-            <button data-lang="de" class="lang-btn">DE</button>
-            <button data-lang="ja" class="lang-btn">日本語</button>
+            <button data-lang="en" class="lang-btn active">🇬🇧 English</button>
+            <button data-lang="de" class="lang-btn">🇩🇪 Deutsch</button>
+            <button data-lang="ja" class="lang-btn">🇯🇵 日本語</button>
           </div>
         </div>
       </div>
@@ -342,7 +354,7 @@
     const spotsData = [
       {
         id: 1,
-        img: "https://picsum.photos/id/20/400/300",  // イメージは後で差し替え可
+        img: "https://picsum.photos/id/20/400/300",
         officialUrl: "https://www.duesseldorf.de/japan-day.html",
         name: { en: "Little Tokyo (Immermannstraße)", de: "Klein-Tokio (Immermannstraße)", ja: "リトルトーキョー (インマーマン通り)" },
         desc: { en: "Heart of Japanese community with restaurants, shops and supermarkets.", de: "Herz der japanischen Gemeinschaft mit Restaurants, Geschäften und Supermärkten.", ja: "レストラン、ショップ、スーパーが集まる日本人コミュニティの中心。" }
@@ -420,7 +432,7 @@
     });
 
     let currentLang = "en";
-    let currentTheme = "dark"; // dark main
+    let currentTheme = "dark";
 
     // DOM 要素
     const mainPage = document.getElementById("mainPage");
@@ -441,11 +453,8 @@
           }
         }
       });
-      // タイトルも書き換え
       document.querySelector("h1").innerText = translations[currentLang].app_title;
-      // カード再描画
       renderCardList();
-      // 詳細が開いていれば再描画
       if (!detailPage.classList.contains("hidden")) {
         const currentDetailId = detailPage.getAttribute("data-detail-id");
         if (currentDetailId) showDetail(parseInt(currentDetailId));
@@ -500,7 +509,6 @@
       window.scrollTo(0, 0);
     }
 
-    // テーマ切替 (ダークメイン)
     function setTheme(theme) {
       currentTheme = theme;
       if (theme === "dark") {
@@ -512,21 +520,18 @@
       }
     }
 
-    // スポンサー設定 (後から変更可能なダミー)
     function initSponsors() {
-      // デフォルトプレースホルダー、後から書き換え可能
       const topLink = document.getElementById("sponsorTopLink");
       const bottomLink = document.getElementById("sponsorBottomLink");
       const topImg = document.getElementById("sponsorTopImg");
       const bottomImg = document.getElementById("sponsorBottomImg");
-      // 例: あとで実際の広告主URLに変更するための案内
       topLink.href = "https://example.com/sponsor1";
       bottomLink.href = "https://example.com/sponsor2";
-      // 画像も任意に変更できるようにコメント
+      // 画像を実際のものに変更する場合はここを編集
       // topImg.src = "icons/your-sponsor.jpg";
     }
 
-    // 言語ボタン
+    // イベントリスナー
     document.querySelectorAll("[data-lang]").forEach(btn => {
       btn.addEventListener("click", (e) => {
         document.querySelectorAll("[data-lang]").forEach(b => b.classList.remove("active"));
@@ -541,7 +546,6 @@
     document.getElementById("lightModeBtn").addEventListener("click", () => setTheme("light"));
     backBtn.addEventListener("click", backToList);
 
-    // 初期化
     function init() {
       const savedLang = localStorage.getItem("language");
       if (savedLang && translations[savedLang]) {
@@ -555,15 +559,15 @@
       }
       const savedTheme = localStorage.getItem("theme");
       if (savedTheme === "light") setTheme("light");
-      else setTheme("dark"); // default dark
+      else setTheme("dark");
       initSponsors();
       applyLanguage();
     }
     init();
 
-    // PWA登録用 (Service Worker)
+    // Service Worker 登録
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').then(reg => {
+      navigator.serviceWorker.register('/sw.js').then(reg => {
         console.log('SW registered: ', reg);
       }).catch(err => {
         console.log('SW registration failed: ', err);
