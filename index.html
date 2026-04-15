@@ -336,6 +336,7 @@
       }
     };
 
+    // 完全な10スポットのデータ（id1,2はユーザー指定の画像・URLを維持）
     const spotsData = [
       {
         id: 1,
@@ -351,23 +352,65 @@
         name: { en: "Shochiku Supermarket", de: "Shochiku Supermarkt", ja: "松竹スーパー" },
         desc: { en: "The largest Japanese grocery store, sake and fresh ingredients.", de: "Der größte japanische Lebensmittelladen, Sake und frische Zutaten.", ja: "最大級の日本食材店、日本酒や生鮮食品も豊富。" }
       },
-      // ... 他のスポットは同じなので省略（スペース節約のため、実際のコードでは全10件入れてください）
-      // 完全版は前回のコードを参照
+      {
+        id: 3,
+        img: "https://picsum.photos/id/42/400/300",
+        officialUrl: "https://www.taiyo-foods.de/",
+        name: { en: "Taiyo Foods", de: "Taiyo Foods", ja: "大洋食品" },
+        desc: { en: "Japanese & Asian grocery store near Immermannstraße.", de: "Japanischer & asiatischer Supermarkt nahe Immermannstraße.", ja: "インマーマン通り近くの日系・アジア食品店。" }
+      },
+      {
+        id: 4,
+        img: "https://picsum.photos/id/51/400/300",
+        officialUrl: "https://www.ekohaus.de/",
+        name: { en: "EKŌ-Haus", de: "EKŌ-Haus", ja: "惠光センター" },
+        desc: { en: "Japanese cultural center with temple, garden and events.", de: "Japanisches Kulturzentrum mit Tempel, Garten und Veranstaltungen.", ja: "寺院、日本庭園、文化イベントがある日本文化センター。" }
+      },
+      {
+        id: 5,
+        img: "https://picsum.photos/id/60/400/300",
+        officialUrl: "https://www.japanclub.de/",
+        name: { en: "Japan Club Düsseldorf", de: "Japan Club Düsseldorf", ja: "日本クラブ" },
+        desc: { en: "Networking and social hub for Japanese and German members.", de: "Netzwerk- und Sozialtreff für japanische und deutsche Mitglieder.", ja: "日本人とドイツ人の交流・ネットワーキング拠点。" }
+      },
+      {
+        id: 6,
+        img: "https://picsum.photos/id/84/400/300",
+        officialUrl: "https://www.dokomi.de/",
+        name: { en: "DoKomi (Anime Convention)", de: "DoKomi (Anime-Convention)", ja: "ドコミ (アニメコンベンション)" },
+        desc: { en: "Germany's largest anime & manga convention, held annually.", de: "Deutschlands größte Anime- und Manga-Convention, jährlich.", ja: "ドイツ最大級のアニメ・マンガコンベンション、年次開催。" }
+      },
+      {
+        id: 7,
+        img: "https://picsum.photos/id/91/400/300",
+        officialUrl: "https://www.duesseldorf.de/japan-day.html",
+        name: { en: "Japan-Tag (Japan Day)", de: "Japan-Tag", ja: "日本デー" },
+        desc: { en: "Huge Japanese culture festival with fireworks and cosplay.", de: "Großes japanisches Kulturfest mit Feuerwerk und Cosplay.", ja: "花火やコスプレが楽しめる日本文化の大規模フェス。" }
+      },
+      {
+        id: 8,
+        img: "https://picsum.photos/id/96/400/300",
+        officialUrl: "https://www.japanische-schule.de/",
+        name: { en: "Japanese School Düsseldorf", de: "Japanische Schule Düsseldorf", ja: "デュッセルドルフ日本人学校" },
+        desc: { en: "Japanese elementary & junior high school following Japanese curriculum.", de: "Japanische Grund- und Mittelschule nach japanischem Lehrplan.", ja: "日本の学習指導要領に基づく小中学校。" }
+      },
+      {
+        id: 9,
+        img: "https://picsum.photos/id/104/400/300",
+        officialUrl: "https://www.kinokuniya.de/",
+        name: { en: "Kinokuniya Bookstore", de: "Kinokuniya Buchhandlung", ja: "紀伊國屋書店" },
+        desc: { en: "Japanese books, manga, magazines and stationery.", de: "Japanische Bücher, Manga, Zeitschriften und Schreibwaren.", ja: "日本語書籍、マンガ、雑誌、文房具。" }
+      },
+      {
+        id: 10,
+        img: "https://picsum.photos/id/123/400/300",
+        officialUrl: "https://www.nagaya.de/",
+        name: { en: "Restaurant Nagaya", de: "Restaurant Nagaya", ja: "レストラン ナガヤ" },
+        desc: { en: "Michelin-starred Japanese fine dining.", de: "Japanische Gourmetküche mit Michelin-Stern.", ja: "ミシュラン星付きの高級日本料理店。" }
+      }
     ];
 
-    // スポットデータを簡略化（実際は10件すべてをここに含める）
-    // ※ ここでは説明のために最低限の例を示します。実際に使うときは前回の完全なspotsDataをコピーしてください。
-    // 以下は動作確認用のダミー（本番では削除して完全な10件に差し替え）
-    for (let i = 3; i <= 10; i++) {
-      spotsData.push({
-        id: i,
-        img: "https://picsum.photos/id/"+(i*10)+"/400/300",
-        officialUrl: "#",
-        name: { en: "Spot "+i, de: "Ort "+i, ja: "スポット "+i },
-        desc: { en: "Description", de: "Beschreibung", ja: "説明" }
-      });
-    }
-
+    // 各言語の説明をspotsに追加
     spotsData.forEach(spot => {
       translations.en.spots[spot.id] = { name: spot.name.en, desc: spot.desc.en };
       translations.de.spots[spot.id] = { name: spot.name.de, desc: spot.desc.de };
@@ -461,18 +504,19 @@
       }
     }
 
-function initSponsors() {
-  const topLink = document.getElementById("sponsorTopLink");
-  const topImg = document.getElementById("sponsorTopImg");
-  topLink.href = "http://www.newsdigest.de/newsde/duesseldorf-guide/";
-  topImg.src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4ES7yNuBDuYbwO20QoZrtZCbtLJq1zGs9JsT22xHIeNigUamId6TCERRF&s=10";
+    function initSponsors() {
+      const topLink = document.getElementById("sponsorTopLink");
+      const topImg = document.getElementById("sponsorTopImg");
+      topLink.href = "http://www.newsdigest.de/newsde/duesseldorf-guide/";
+      topImg.src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4ES7yNuBDuYbwO20QoZrtZCbtLJq1zGs9JsT22xHIeNigUamId6TCERRF&s=10";
 
-  const bottomLink = document.getElementById("sponsorBottomLink");
-  const bottomImg = document.getElementById("sponsorBottomImg");
-  bottomLink.href = "https://www.instagram.com/peutetre1968?igsh=MWM0MnkwbnVjMThnNg==";
-  bottomImg.src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIxPMgrfgop4kKM6QV3w8ZVxrUCs-uHQ239aegE_0ZrQ&s";
-}
- document.querySelectorAll("[data-lang]").forEach(btn => {
+      const bottomLink = document.getElementById("sponsorBottomLink");
+      const bottomImg = document.getElementById("sponsorBottomImg");
+      bottomLink.href = "https://www.instagram.com/peutetre1968?igsh=MWM0MnkwbnVjMThnNg==";
+      bottomImg.src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIxPMgrfgop4kKM6QV3w8ZVxrUCs-uHQ239aegE_0ZrQ&s";
+    }
+
+    document.querySelectorAll("[data-lang]").forEach(btn => {
       btn.addEventListener("click", (e) => {
         document.querySelectorAll("[data-lang]").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
@@ -500,7 +544,7 @@ function initSponsors() {
       const savedTheme = localStorage.getItem("theme");
       if (savedTheme === "light") setTheme("light");
       else setTheme("dark");
-      initSponsors();   // スポンサー設定を反映
+      initSponsors();
       applyLanguage();
     }
     init();
