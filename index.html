@@ -521,15 +521,19 @@
     }
 
     function initSponsors() {
-      const topLink = document.getElementById("sponsorTopLink");
-      const bottomLink = document.getElementById("sponsorBottomLink");
-      const topImg = document.getElementById("sponsorTopImg");
-      const bottomImg = document.getElementById("sponsorBottomImg");
-      topLink.href = "https://example.com/sponsor1";
-      bottomLink.href = "https://example.com/sponsor2";
-      // 画像を実際のものに変更する場合はここを編集
-      // topImg.src = "icons/your-sponsor.jpg";
-    }
+  const topLink = document.getElementById("sponsorTopLink");
+  const bottomLink = document.getElementById("sponsorBottomLink");
+  const topImg = document.getElementById("sponsorTopImg");
+  const bottomImg = document.getElementById("sponsorBottomImg");
+
+  // 👇 ここにスポンサーの公式URLを入力
+  topLink.href = "https://example.com/sponsor1";
+  bottomLink.href = "https://example.com/sponsor2";
+
+  // 👇 画像ファイルがある場合はここで差し替え
+  // topImg.src = "icons/sponsor-top.jpg";
+  // bottomImg.src = "icons/sponsor-bottom.jpg";
+}
 
     // イベントリスナー
     document.querySelectorAll("[data-lang]").forEach(btn => {
